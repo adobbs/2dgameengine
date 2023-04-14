@@ -49,15 +49,13 @@ void Game::Initialize()
     isRunning = true;
 }
 
-void Game::Run()
+glm::vec2 playerPosition;
+glm::vec2 playerVelocity;
+
+void Game::Setup()
 {
-    Setup();
-    while (isRunning)
-    {
-        ProcessInput();
-        Update();
-        Render();
-    }
+    playerPosition = glm::vec2(10.0, 20.0);
+    playerVelocity = glm::vec2(0.5, 0.0);
 }
 
 void Game::ProcessInput()
@@ -80,17 +78,13 @@ void Game::ProcessInput()
     }
 }
 
-glm::vec2 playerPosition;
-glm::vec2 playerVelocity;
-
-void Game::Setup()
-{
-    playerPosition = glm::vec2(10.0, 20.0);
-    playerVelocity = glm::vec2(1.0, 1.0);
-}
-
 void Game::Update()
 {
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), millisecsPreviousFrame + MILLISECS_PER_FRAME));
+
+    // Store the current frame time
+    millisecsPreviousFrame = SDL_GetTicks();
+
     playerPosition.x += playerVelocity.x;
     playerPosition.y += playerVelocity.y;
 }
@@ -116,6 +110,17 @@ void Game::Render()
     SDL_DestroyTexture(texture);
 
     SDL_RenderPresent(renderer);
+}
+
+void Game::Run()
+{
+    Setup();
+    while (isRunning)
+    {
+        ProcessInput();
+        Update();
+        Render();
+    }
 }
 
 void Game::Destroy()
