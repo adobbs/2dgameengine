@@ -80,7 +80,11 @@ void Game::ProcessInput()
 
 void Game::Update()
 {
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), millisecsPreviousFrame + MILLISECS_PER_FRAME));
+    int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
+    
+    if(timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
+        SDL_Delay(timeToWait);   
+    }
 
     // Store the current frame time
     millisecsPreviousFrame = SDL_GetTicks();
