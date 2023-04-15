@@ -12,9 +12,9 @@ auto t = std::time(nullptr);
 auto tm = *std::localtime(&t);
 
 void Logger::Log(const std::string& message) {
-    std::cout << ESC << GREEN_TEXT << "LOG: [ " << std::put_time(&tm, "%d/%b/%Y %H:%M:%S") << " ] " << message << RESET << std::endl;
+    std::cout << ESC << GREEN_TEXT << "LOG | " << std::put_time(&tm, "%d-%b-%Y %H:%M:%S") << " - " << message << RESET << std::endl;
 }
 
 void Logger::Err(const std::string& message) {
-    std::cout << ESC << RED_TEXT << "ERROR: [ " << std::put_time(&tm, "%d/%b/%Y %H:%M:%S") << " ] " << message << RESET << std::endl;
+    std::cout << ESC << RED_TEXT << "ERR | " << std::put_time(&tm, "%d-%b-%Y %H:%M:%S") << " - " << message << RESET << std::endl;
 }
