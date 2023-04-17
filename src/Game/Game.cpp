@@ -1,23 +1,21 @@
 #include "Game.h"
 #include "../Logger/Logger.h"
+#include "../ECS/ECS.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
 #include <iostream>
 
-Game::Game()
-{
+Game::Game() {
     isRunning = false;
     Logger::Log("Game constructor called");
 }
 
-Game::~Game()
-{
+Game::~Game() {
     Logger::Log("Game destructor called");
 }
 
-void Game::Initialize()
-{
+void Game::Initialize() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         Logger::Err("Error initializing SDL.");
@@ -50,17 +48,15 @@ void Game::Initialize()
     isRunning = true;
 }
 
-glm::vec2 playerPosition;
-glm::vec2 playerVelocity;
-
-void Game::Setup()
-{
-    playerPosition = glm::vec2(10.0, 20.0);
-    playerVelocity = glm::vec2(100.0, 0.0);
+void Game::Setup() {
+    // TODO:
+    // Entity tank = registry.CreateEntity();
+    // tank.AddComponent<TransformComponent>();
+    // tank.AddComponent<BoxColliderComponent>();
+    // tank.AddComponent<SpriteComponent>("./assets/images/tank.png");
 }
 
-void Game::ProcessInput()
-{
+void Game::ProcessInput() {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
@@ -79,8 +75,7 @@ void Game::ProcessInput()
     }
 }
 
-void Game::Update()
-{
+void Game::Update() {
     int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
     
     if(timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
@@ -92,35 +87,23 @@ void Game::Update()
     // Store the current frame time
     millisecsPreviousFrame = SDL_GetTicks();
 
-    playerPosition.x += playerVelocity.x * deltaTime;
-    playerPosition.y += playerVelocity.y * deltaTime;
+    // TODO:
+    // MovementSystem.Update();
+    // CollisionSystem.Update();
+    // DamageSystem.Update();
 }
 
-void Game::Render()
-{
+void Game::Render() {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
-    // Draw a PNG texture
-    SDL_Surface *surface = IMG_Load("./assets/images/tank-tiger-right.png");
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-
-    SDL_Rect dstRect = {
-        static_cast<int>(playerPosition.x),
-        static_cast<int>(playerPosition.y),
-        32,
-        32};
-
-    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
-
-    SDL_DestroyTexture(texture);
+    // TODO:
+    // Render game objects
 
     SDL_RenderPresent(renderer);
 }
 
-void Game::Run()
-{
+void Game::Run() {
     Setup();
     while (isRunning)
     {
@@ -130,8 +113,7 @@ void Game::Run()
     }
 }
 
-void Game::Destroy()
-{
+void Game::Destroy() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
