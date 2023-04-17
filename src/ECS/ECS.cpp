@@ -1,3 +1,5 @@
 #include "ECS.h"
 
-// TODO
+int Entity::GetId() const {
+    return id;
+}
