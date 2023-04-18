@@ -53,7 +53,7 @@ class System {
         void AddEntityToSystem(Entity entity);
         void RemoveEntityFromSystem(Entity entity);
         std::vector<Entity> GetSystemEntities() const;
-        Signature& GetComponentSignature() const;
+        const Signature& GetComponentSignature() const;
 
         // Define component types required by system
         template <typename T> void RequireComponent();
