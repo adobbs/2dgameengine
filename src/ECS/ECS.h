@@ -145,7 +145,6 @@ class Registry {
         void Update();
 
         Entity CreateEntity();
-        void AddEntityToSystem(Entity entity);
 
         template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
         template <typename TComponent> void RemoveComponent(Entity entity);
@@ -155,6 +154,8 @@ class Registry {
         template <typename TSystem> void RemoveSystem();
         template <typename TSystem> bool HasSystem() const;
         template <typename TSystem> TSystem& GetSystem() const;
+
+        void AddEntityToSystems(Entity entity);
         
         // TODO:
         // KillEntity()

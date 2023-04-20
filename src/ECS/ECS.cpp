@@ -37,6 +37,26 @@ Entity Registry::CreateEntity() {
     return entity;
 }
 
+void Registry::AddEntityToSystems(Entity entity) {
+    const auto entityId = entity.GetId();
+
+    const auto& entityComponentSignature = entityComponentSignatures[entityId];
+
+    for (auto& system: systems) {
+        const auto& systemComponentSignature = system.second->GetComponentSignature();
+
+        // bitwise AND comparison results in only where both are true
+        // Ex. (1111 & 0101) == 0101
+        //     (0101) == 0101
+        // So a 0101 system is interested in an entity with a 1111 signature
+        bool isInterested = (entityComponentSignature & systemComponentSignature) == systemComponentSignature;
+
+        if (isInterested) {
+            system.second->AddEntityToSystem(entity);
+        }
+    }
+}
+
 void Registry::Update() {
     // TODO:
     // Add entities
