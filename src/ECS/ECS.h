@@ -44,6 +44,8 @@ class Entity {
         Entity& operator =(const Entity& other) = default;
         bool operator ==(const Entity& other) const { return id == other.id; }
         bool operator !=(const Entity& other) const { return id != other.id; }
+        bool operator >(const Entity& other) const { return id > other.id; }
+        bool operator <(const Entity& other) const { return id < other.id; }
 };
 
 // === System === //
@@ -189,7 +191,7 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
         componentPool->Resize(numEntities);
     }
 
-    TComponent newComponent(std::forward<TArgs>(args...));
+    TComponent newComponent(std::forward<TArgs>(args)...);
 
     componentPool->Set(entityId, newComponent);
     entityComponentSignatures[entityId].set(componentId);
