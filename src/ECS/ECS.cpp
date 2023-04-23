@@ -13,7 +13,7 @@ void System::AddEntityToSystem(Entity entity) {
 
 void System::RemoveEntityFromSystem(Entity entity) {
     entities.erase(std::remove_if(entities.begin(), entities.end(),[&entity](Entity other) {
-        return entity.GetId() == other.GetId();
+        return entity == other;
     }), entities.end());
 }
 
@@ -30,7 +30,12 @@ Entity Registry::CreateEntity() {
     entityId = numEntities++;
 
     Entity entity(entityId);
+    entity.registry = this;
     entitiesToBeAdded.insert(entity);
+
+    if (entityId >= entityComponentSignatures.size()) {
+        entityComponentSignatures.resize(entityId + 1);
+    }
 
     Logger::Log("Entity created: " + std::to_string(entityId));
 
@@ -58,7 +63,8 @@ void Registry::AddEntityToSystems(Entity entity) {
 }
 
 void Registry::Update() {
-    // TODO:
-    // Add entities
-    // Remove entities
+    for (auto entity: entitiesToBeAdded) {
+        AddEntityToSystems(entity);
+    }
+    entitiesToBeAdded.clear();
 }
