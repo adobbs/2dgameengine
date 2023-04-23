@@ -56,12 +56,10 @@ void Game::Setup() {
     
     Entity tank = registry->CreateEntity();
 
-    registry->AddComponent<TransformComponent>(tank, glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
-    registry->AddComponent<RigidBodyComponent>(tank, glm::vec2(50.0, 0.0));
+    tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 0.0));
 
-    // TODO:
-    // tank.AddComponent<BoxColliderComponent>();
-    // tank.AddComponent<SpriteComponent>("./assets/images/tank.png");
+    tank.RemoveComponent<TransformComponent>();
 }
 
 void Game::ProcessInput() {
