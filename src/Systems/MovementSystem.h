@@ -14,16 +14,11 @@ class MovementSystem: public System {
 
         void Update(double deltaTime) {
             for (auto entity: GetSystemEntities()) {
-                // Update entity position based on velocity
                 auto& transform = entity.GetComponent<TransformComponent>();
                 const auto rigidbody = entity.GetComponent<RigidBodyComponent>();
 
                 transform.position.x += rigidbody.velocity.x * deltaTime;
                 transform.position.y += rigidbody.velocity.y * deltaTime;
-
-                Logger::Log("Entity id = " + std::to_string(entity.GetId()) = " position is now (" 
-                    + std::to_string(transform.position.x) + ", " + std::to_string(transform.position.y) + ")."
-                );
             }
         }
 };
