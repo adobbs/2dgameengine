@@ -20,11 +20,12 @@ private:
     std::unique_ptr<AssetStore> assetStore;
 
 public:
-    Game(/* args */);
+    Game();
     ~Game();
     void Initialize();
     void Run();
     void Setup();
+    void LoadLevel(int level);
     void ProcessInput();
     void Update();
     void Render();
