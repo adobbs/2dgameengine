@@ -4,6 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../AssetStore/AssetStore.h"
 #include <SDL2/SDL.h>
 
 class RenderSystem: public System {
@@ -13,20 +14,48 @@ class RenderSystem: public System {
             RequireComponent<SpriteComponent>();
         }
 
-        void Update(SDL_Renderer* renderer) {
-            for (auto entity: GetSystemEntities()) {
-                const auto transform = entity.GetComponent<TransformComponent>();
-                const auto sprite = entity.GetComponent<SpriteComponent>();
+        void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore) {
+            struct RenderableEntity {
+                TransformComponent transformComponent;
+                SpriteComponent spriteComponent;
+            };
 
-                SDL_Rect objRect = {
+            std::vector<RenderableEntity> renderableEntities;
+
+            for (auto entity: GetSystemEntities()) {
+                RenderableEntity renderableEntity;
+                renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
+                renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+                renderableEntities.emplace_back(renderableEntity);
+            }
+
+            std::sort(renderableEntities.begin(), renderableEntities.end(), 
+                [](const RenderableEntity& a, const RenderableEntity& b) {
+                    return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
+            });
+            
+            for (auto entity: renderableEntities) {
+                const auto transform = entity.transformComponent;
+                const auto sprite = entity.spriteComponent;
+                
+                SDL_Rect srcRect = sprite.srcRect;
+
+                SDL_Rect dstRect = {
                     static_cast<int>(transform.position.x),
                     static_cast<int>(transform.position.y),
-                    sprite.width,
-                    sprite.height
+                    static_cast<int>(sprite.width * transform.scale.x),
+                    static_cast<int>(sprite.height * transform.scale.y)
                 };
-                
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderFillRect(renderer, &objRect);
+
+                SDL_RenderCopyEx(
+                    renderer,
+                    assetStore->GetTexture(sprite.assetId),
+                    &srcRect,
+                    &dstRect,
+                    transform.rotation,
+                    NULL,
+                    SDL_FLIP_NONE
+                );
             }
         }
 };
