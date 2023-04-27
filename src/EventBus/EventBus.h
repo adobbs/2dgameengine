@@ -52,7 +52,7 @@ class EventBus {
         }
 
         ~EventBus() {
-            Logger::Log("EvenBus destructor called.");
+            Logger::Log("EventBus destructor called.");
         }
 
         void Reset() {
