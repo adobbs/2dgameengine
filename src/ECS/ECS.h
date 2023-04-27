@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <set>
+#include <deque>
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -45,6 +46,7 @@ class Entity {
     public:
         Entity(int id): id(id) {};
         Entity(const Entity& entity) = default;
+        void Kill();
         int GetId() const;
 
         Entity& operator =(const Entity& other) = default;
@@ -153,6 +155,8 @@ class Registry {
 
         std::set<Entity> entitiesToBeAdded;
         std::set<Entity> entitiesToBeKilled;
+
+        std::deque<int> freeIds;
     
     public:
         Registry() {
@@ -166,6 +170,7 @@ class Registry {
         void Update();
 
         Entity CreateEntity();
+        void KillEntity(Entity entity);
 
         template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
         template <typename TComponent> void RemoveComponent(Entity entity);
@@ -178,9 +183,7 @@ class Registry {
         template <typename TSystem> TSystem& GetSystem() const;
 
         void AddEntityToSystems(Entity entity);
-        
-        // TODO:
-        // KillEntity()
+        void RemoveEntityFromSystems(Entity entity);
 };
 
 // === Component template methods === //
