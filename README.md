@@ -1,2 +1,2 @@
 # 2dgameengine
-Simple 2D game engine (C++ and Lua). Use "make" to build and "make run" to run.
+2D ECS game engine (C++ with Lua scripting). Use "make" to build and "make run" to run.
