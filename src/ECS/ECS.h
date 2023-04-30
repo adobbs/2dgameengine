@@ -49,6 +49,11 @@ class Entity {
         void Kill();
         int GetId() const;
 
+        void Tag(const std::string& tag);
+        bool HasTag(const std::string& tag) const;
+        void Group(const std::string& group);
+        bool BelongsToGroup(const std::string& group) const;
+
         Entity& operator =(const Entity& other) = default;
         bool operator ==(const Entity& other) const { return id == other.id; }
         bool operator !=(const Entity& other) const { return id != other.id; }
@@ -156,6 +161,12 @@ class Registry {
         std::set<Entity> entitiesToBeAdded;
         std::set<Entity> entitiesToBeKilled;
 
+        std::unordered_map<std::string, Entity> entityPerTag;
+        std::unordered_map<int, std::string> tagPerEntity;
+
+        std::unordered_map<std::string, std::set<Entity>> entitiesPerGroup;
+        std::unordered_map<int, std::string> groupPerEntity;
+
         std::deque<int> freeIds;
     
     public:
@@ -171,6 +182,16 @@ class Registry {
 
         Entity CreateEntity();
         void KillEntity(Entity entity);
+
+        void TagEntity(Entity entity, const std::string& tag);
+        bool EntityHasTag(Entity entity, const std::string& tag) const;
+        Entity GetEntityByTag(const std::string& tag) const;
+        void RemoveEntityTag(Entity entity);
+
+        void GroupEntity(Entity entity, const std::string& group);
+        bool EntityBelongsToGroup(Entity entity, const std::string& group) const;
+        std::vector<Entity> GetEntitiesByGroup(const std::string& group) const;
+        void RemoveEntityGroup(Entity entity);
 
         template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
         template <typename TComponent> void RemoveComponent(Entity entity);
