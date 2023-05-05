@@ -2857,13 +2857,11 @@ Level = {
                 },
                 on_update_script = {
                     [0] =
-                    function(entity, delta_time, ellapsed_time)
-                        print("Executing F-22 Lua script!")
-
-                        -- -- change the position of the the airplane to follow a sine wave movement
-                        -- local new_x = ellapsed_time * 0.09
-                        -- local new_y = 200 + (math.sin(ellapsed_time * 0.001) * 50)
-                        -- set_position(entity, new_x, new_y) -- set the new position
+                    function(entity, delta_time, elapsed_time)
+                        -- change the position of the the airplane to follow a sine wave movement
+                        local new_x = elapsed_time * 0.09
+                        local new_y = 200 + (math.sin(elapsed_time * 0.001) * 50)
+                        set_position(entity, new_x, new_y) -- set the new position
                     end
                 }
             }
