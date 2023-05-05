@@ -2794,27 +2794,25 @@ Level = {
                 on_update_script = {
                     [0] =
                     function(entity, delta_time, ellapsed_time)
-                        print("Executing the SU-27 fighter jet Lua script!")
+                        -- this function makes the fighter jet move up and down the map shooting projectiles
+                        local current_position_x, current_position_y = get_position(entity)
+                        local current_velocity_x, current_velocity_y = get_velocity(entity)
 
-                        -- -- this function makes the fighter jet move up and down the map shooting projectiles
-                        -- local current_position_x, current_position_y = get_position(entity)
-                        -- local current_velocity_x, current_velocity_y = get_velocity(entity)
+                        -- if it reaches the top or the bottom of the map
+                        if current_position_y < 10  or current_position_y > map_height - 32 then
+                            set_velocity(entity, 0, current_velocity_y * -1); -- flip the entity y-velocity
+                        else
+                            set_velocity(entity, 0, current_velocity_y); -- do not flip y-velocity
+                        end
 
-                        -- -- if it reaches the top or the bottom of the map
-                        -- if current_position_y < 10  or current_position_y > map_height - 32 then
-                        --     set_velocity(entity, 0, current_velocity_y * -1); -- flip the entity y-velocity
-                        -- else
-                        --     set_velocity(entity, 0, current_velocity_y); -- do not flip y-velocity
-                        -- end
-
-                        -- -- set the transform rotation to match going up or down
-                        -- if (current_velocity_y < 0) then
-                        --     set_rotation(entity, 0) -- point up
-                        --     set_projectile_velocity(entity, 0, -200) -- shoot projectiles up
-                        -- else
-                        --     set_rotation(entity, 180) -- point down
-                        --     set_projectile_velocity(entity, 0, 200) -- shoot projectiles down
-                        -- end
+                        -- set the transform rotation to match going up or down
+                        if (current_velocity_y < 0) then
+                            set_rotation(entity, 0) -- point up
+                            set_projectile_velocity(entity, 0, -200) -- shoot projectiles up
+                        else
+                            set_rotation(entity, 180) -- point down
+                            set_projectile_velocity(entity, 0, 200) -- shoot projectiles down
+                        end
                     end
                 }
             }
